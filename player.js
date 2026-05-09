@@ -6,7 +6,7 @@ export function createPlayer() {
 
     const material = new THREE.MeshStandardMaterial({
 
-        color: 0x00ffcc
+        color: 0xaa00ff
 
     });
 
