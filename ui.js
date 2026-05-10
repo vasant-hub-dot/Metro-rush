@@ -1,20 +1,18 @@
-export function updateHUD(score, level)
-{
-    document.getElementById('score').innerText =
+export function updateHUD(score,level,coins) {
 
-        'Score: ' + score;
+document.getElementById('score').innerText =
+'Score: ' + score;
 
-    document.getElementById('level').innerText =
+document.getElementById('level').innerText =
+'Level: ' + level;
 
-        'Level: ' + level;
+document.getElementById('coins').innerText =
+'Coins: ' + coins;
+
 }
 
-export function showGameOver()
-{
-    alert("GAME OVER");
-}
+export function showVictory() {
 
-export function showVictory()
-{
-    alert("YOU WON THE TROPHY!");
+alert('YOU WON THE TROPHY!');
+
 }
