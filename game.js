@@ -1,5 +1,6 @@
 
 
+
 import { createPlayer, movePlayer } from './player.js';
 import { spawnObstacle, updateObstacles } from './obstacle.js';
 import { spawnCoin, updateCoins } from './coins.js';
