@@ -2,54 +2,53 @@ const obstacles = [];
 
 export function spawnObstacle(scene) {
 
-    const geometry = new THREE.BoxGeometry(2, 2, 2);
+const geometry = new THREE.BoxGeometry(3,4,10);
 
-    const material = new THREE.MeshStandardMaterial({
+const material = new THREE.MeshStandardMaterial({
 
-        color: 0xff0000
+color: 0x555555,
+metalness: 0.8
 
-    });
+});
 
-    const obstacle = new THREE.Mesh(geometry, material);
+const obstacle = new THREE.Mesh(geometry, material);
 
-    const lanes = [-3, 0, 3];
+const lanes = [-3,0,3];
 
-    obstacle.position.x =
+obstacle.position.x =
+lanes[Math.floor(Math.random()*lanes.length)];
 
-        lanes[Math.floor(Math.random() * lanes.length)];
+obstacle.position.z = -120;
+obstacle.position.y = 2;
 
-    obstacle.position.z = -100;
+scene.add(obstacle);
 
-    obstacle.position.y = 1;
+obstacles.push(obstacle);
 
-    scene.add(obstacle);
-
-    obstacles.push(obstacle);
 }
 
-export function updateObstacles(scene, player, speed) {
+export function updateObstacles(scene,player,speed) {
 
-    obstacles.forEach((obs, index) => {
+obstacles.forEach((obs,index)=>{
 
-        obs.position.z += speed;
+obs.position.z += speed;
 
-        const distance = obs.position.distanceTo(player.position);
+const distance = obs.position.distanceTo(player.position);
 
-        if(distance < 1.5) {
+if(distance < 2.5) {
 
-            alert('Game Over');
+alert('GAME OVER');
+location.reload();
 
-            location.reload();
+}
 
-        }
+if(obs.position.z > 20) {
 
-        if(obs.position.z > 20) {
+scene.remove(obs);
+obstacles.splice(index,1);
 
-            scene.remove(obs);
+}
 
-            obstacles.splice(index, 1);
+});
 
-        }
-
-    });
 }
