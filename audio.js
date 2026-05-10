@@ -1,20 +1,49 @@
-let currentMusic;
+let audioContext;
 
 export function playMusic(trackName) {
 
-if(currentMusic) {
+audioContext =
+new (window.AudioContext ||
+window.webkitAudioContext)();
 
-currentMusic.pause();
+const oscillator =
+audioContext.createOscillator();
+
+const gainNode =
+audioContext.createGain();
+
+oscillator.connect(gainNode);
+
+gainNode.connect(audioContext.destination);
+
+if(trackName === 'dandelion') {
+
+oscillator.frequency.value = 220;
 
 }
 
-currentMusic = new Audio(
-`assets/music/${trackName}.mp3`
-);
+if(trackName === 'sodapop') {
 
-currentMusic.loop = true;
-currentMusic.volume = 0.5;
+oscillator.frequency.value = 300;
 
-currentMusic.play();
+}
+
+if(trackName === 'nightchanges') {
+
+oscillator.frequency.value = 180;
+
+}
+
+if(trackName === 'carolofthebells') {
+
+oscillator.frequency.value = 400;
+
+}
+
+oscillator.type = 'sine';
+
+gainNode.gain.value = 0.03;
+
+oscillator.start();
 
 }
