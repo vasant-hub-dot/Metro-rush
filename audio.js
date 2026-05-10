@@ -1,21 +1,20 @@
 let currentMusic;
 
-export function playMusic(trackName)
-{
-    if(currentMusic)
-    {
-        currentMusic.pause();
-    }
+export function playMusic(trackName) {
 
-    currentMusic = new Audio(
+if(currentMusic) {
 
-        `assets/music/${trackName}.mp3`
+currentMusic.pause();
 
-    );
+}
 
-    currentMusic.loop = true;
+currentMusic = new Audio(
+`assets/music/${trackName}.mp3`
+);
 
-    currentMusic.volume = 0.5;
+currentMusic.loop = true;
+currentMusic.volume = 0.5;
 
-    currentMusic.play();
+currentMusic.play();
+
 }
