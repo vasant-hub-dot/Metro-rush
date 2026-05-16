@@ -108,7 +108,7 @@ if(e.key === ' ') {
 
 if(!isJumping){
 
-velocityY = 0.35;
+velocityY = 0. 55;
 
 isJumping = true;
 
