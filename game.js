@@ -2,7 +2,6 @@ import { createPlayer, movePlayer } from './player.js';
 import { spawnObstacle, updateObstacles } from './obstacle.js';
 import { spawnCoin, updateCoins } from './coins.js';
 
-import { shopItems } from './shop.js';
 import { saveGame, loadGame } from './save.js';
 
 
@@ -135,19 +134,12 @@ camera.lookAt(
 
 
 /* =========================
-GAME SAVE DATA
+SAVE DATA
 ========================= */
 
 let gameData = {
 
-coins: 0,
-
-unlockedCharacters: [
-'Default Runner'
-],
-
-selectedCharacter:
-'Default Runner'
+coins: 50000
 
 };
 
@@ -184,7 +176,7 @@ color:0xff00ff
 );
 
 hoverboard.position.y =
-0.3;
+0.2;
 
 scene.add(hoverboard);
 
@@ -538,9 +530,13 @@ coinCounter.count >= 100
 
 coinCounter.count -= 100;
 
+if(player.material) {
+
 player.material.color.set(
 0x111111
 );
+
+}
 
 alert(
 'Ninja Unlocked'
@@ -573,9 +569,13 @@ coinCounter.count >= 300
 
 coinCounter.count -= 300;
 
+if(player.material) {
+
 player.material.color.set(
 0xaaaaaa
 );
+
+}
 
 alert(
 'Robot Unlocked'
@@ -608,9 +608,13 @@ coinCounter.count >= 1000
 
 coinCounter.count -= 1000;
 
+if(player.material) {
+
 player.material.color.set(
 0xff3300
 );
+
+}
 
 alert(
 'Fire Warrior Unlocked'
@@ -643,9 +647,13 @@ coinCounter.count >= 10000
 
 coinCounter.count -= 10000;
 
+if(player.material) {
+
 player.material.color.set(
 0x9900ff
 );
+
+}
 
 alert(
 'Galaxy Runner Unlocked'
