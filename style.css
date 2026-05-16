@@ -7,11 +7,23 @@ background: black;
 
 }
 
+
+
+/* CANVAS */
+
 canvas {
 
 display: block;
+position: fixed;
+top: 0;
+left: 0;
+z-index: 1;
 
 }
+
+
+
+/* MAIN MENU */
 
 #menu {
 
@@ -24,45 +36,261 @@ display: flex;
 flex-direction: column;
 justify-content: center;
 align-items: center;
-background: rgba(0,0,0,0.85);
-z-index: 10;
+background: rgba(0,0,0,0.9);
+z-index: 20;
 
 }
+
+
 
 #menu h1 {
 
 color: white;
 font-size: 70px;
 margin-bottom: 30px;
+letter-spacing: 5px;
 
 }
 
-#musicSelect {
 
-padding: 15px;
-font-size: 22px;
-margin-bottom: 20px;
-
-}
 
 #startButton {
 
-padding: 15px 40px;
+padding: 18px 45px;
 font-size: 24px;
 background: cyan;
 border: none;
+border-radius: 12px;
 cursor: pointer;
-border-radius: 10px;
+font-weight: bold;
+transition: 0.3s;
 
 }
+
+
+
+#startButton:hover {
+
+transform: scale(1.1);
+
+}
+
+
+
+/* HUD */
 
 #hud {
 
 position: absolute;
-top: 10px;
-left: 10px;
+top: 15px;
+left: 15px;
 color: white;
-font-size: 25px;
-z-index: 5;
+font-size: 24px;
+z-index: 10;
+font-weight: bold;
+
+}
+
+
+
+/* SHOP BUTTON */
+
+#shopButton {
+
+position: absolute;
+top: 20px;
+right: 20px;
+padding: 15px 30px;
+font-size: 20px;
+font-weight: bold;
+background: gold;
+border: none;
+border-radius: 12px;
+cursor: pointer;
+z-index: 15;
+transition: 0.3s;
+
+}
+
+
+
+#shopButton:hover {
+
+transform: scale(1.1);
+
+}
+
+
+
+/* SHOP MENU */
+
+#shopMenu {
+
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%,-50%);
+width: 400px;
+max-height: 80vh;
+overflow-y: auto;
+background: rgba(0,0,0,0.95);
+padding: 30px;
+border-radius: 20px;
+display: none;
+flex-direction: column;
+gap: 15px;
+z-index: 100;
+box-shadow: 0 0 30px cyan;
+
+}
+
+
+
+/* SHOP TITLE */
+
+#shopMenu h1 {
+
+color: cyan;
+text-align: center;
+font-size: 45px;
+margin-bottom: 10px;
+
+}
+
+
+
+/* SECTION TITLES */
+
+#shopMenu h2 {
+
+color: gold;
+margin-top: 20px;
+margin-bottom: 5px;
+
+}
+
+
+
+/* SHOP BUTTONS */
+
+#shopMenu button {
+
+padding: 15px;
+font-size: 18px;
+font-weight: bold;
+border: none;
+border-radius: 12px;
+cursor: pointer;
+transition: 0.3s;
+
+}
+
+
+
+/* BUTTON HOVER */
+
+#shopMenu button:hover {
+
+transform: scale(1.05);
+
+}
+
+
+
+/* CLOSE BUTTON */
+
+#closeShop {
+
+background: red;
+color: white;
+
+}
+
+
+
+/* CHARACTER BUTTON COLORS */
+
+#buyNinja {
+
+background: #222;
+color: white;
+
+}
+
+#buyRobot {
+
+background: silver;
+color: black;
+
+}
+
+#buyFire {
+
+background: orangered;
+color: white;
+
+}
+
+#buyGalaxy {
+
+background: purple;
+color: white;
+
+}
+
+
+
+/* HOVERBOARD COLORS */
+
+#buyNeonBoard {
+
+background: magenta;
+color: white;
+
+}
+
+#buyIceBoard {
+
+background: lightblue;
+color: black;
+
+}
+
+#buyLavaBoard {
+
+background: darkred;
+color: white;
+
+}
+
+#buyGalaxyBoard {
+
+background: indigo;
+color: white;
+
+}
+
+
+
+/* RIDES */
+
+#buyPlane {
+
+background: white;
+color: black;
+
+}
+
+#buyRocket {
+
+background: orange;
+color: black;
+
+}
+
+#buyDragon {
+
+background: green;
+color: white;
 
 }
