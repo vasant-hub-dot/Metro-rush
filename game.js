@@ -2,19 +2,48 @@ import { createPlayer, movePlayer } from './player.js';
 import { spawnObstacle, updateObstacles } from './obstacle.js';
 import { spawnCoin, updateCoins } from './coins.js';
 
+import { shopItems } from './shop.js';
+import { saveGame, loadGame } from './save.js';
+
+
+
+/* =========================
+SCENE
+========================= */
+
 const scene = new THREE.Scene();
 
-scene.background = new THREE.Color(0x87ceeb);
+scene.background =
+new THREE.Color(0x87ceeb);
 
-const camera = new THREE.PerspectiveCamera(
+
+
+/* =========================
+CAMERA
+========================= */
+
+const camera =
+new THREE.PerspectiveCamera(
+
 75,
-window.innerWidth/window.innerHeight,
+window.innerWidth /
+window.innerHeight,
 0.1,
 1000
+
 );
 
-const renderer = new THREE.WebGLRenderer({
+
+
+/* =========================
+RENDERER
+========================= */
+
+const renderer =
+new THREE.WebGLRenderer({
+
 antialias:true
+
 });
 
 renderer.setSize(
@@ -28,7 +57,9 @@ renderer.domElement
 
 
 
-/* LIGHTS */
+/* =========================
+LIGHTS
+========================= */
 
 const light =
 new THREE.DirectionalLight(
@@ -49,9 +80,12 @@ new THREE.AmbientLight(
 
 
 
-/* ROAD */
+/* =========================
+ROAD
+========================= */
 
-const road = new THREE.Mesh(
+const road =
+new THREE.Mesh(
 
 new THREE.BoxGeometry(
 14,
@@ -71,15 +105,20 @@ scene.add(road);
 
 
 
-/* PLAYER */
+/* =========================
+PLAYER
+========================= */
 
-const player = createPlayer();
+const player =
+createPlayer();
 
 scene.add(player);
 
 
 
-/* CAMERA */
+/* =========================
+CAMERA POSITION
+========================= */
 
 camera.position.set(
 0,
@@ -95,11 +134,71 @@ camera.lookAt(
 
 
 
-/* CHASER */
+/* =========================
+GAME SAVE DATA
+========================= */
 
-const chaser = new THREE.Group();
+let gameData = {
 
-const body = new THREE.Mesh(
+coins: 0,
+
+unlockedCharacters: [
+'Default Runner'
+],
+
+selectedCharacter:
+'Default Runner'
+
+};
+
+
+
+const saved =
+loadGame();
+
+if(saved) {
+
+gameData = saved;
+
+}
+
+
+
+/* =========================
+HOVERBOARD
+========================= */
+
+const hoverboard =
+new THREE.Mesh(
+
+new THREE.BoxGeometry(
+2,
+0.2,
+4
+),
+
+new THREE.MeshStandardMaterial({
+color:0xff00ff
+})
+
+);
+
+hoverboard.position.y =
+0.3;
+
+scene.add(hoverboard);
+
+
+
+/* =========================
+CHASER
+========================= */
+
+const chaser =
+new THREE.Group();
+
+const body =
+new THREE.Mesh(
 
 new THREE.BoxGeometry(
 1.5,
@@ -115,7 +214,8 @@ color:0xff0000
 
 body.position.y = 1.5;
 
-const head = new THREE.Mesh(
+const head =
+new THREE.Mesh(
 
 new THREE.SphereGeometry(
 0.6,
@@ -139,7 +239,9 @@ scene.add(chaser);
 
 
 
-/* BUILDINGS */
+/* =========================
+BUILDINGS
+========================= */
 
 for(let i=0;i<40;i++) {
 
@@ -153,7 +255,8 @@ new THREE.BoxGeometry(
 ),
 
 new THREE.MeshStandardMaterial({
-color:Math.random()*0xffffff
+color:
+Math.random()*0xffffff
 })
 
 );
@@ -178,7 +281,8 @@ new THREE.BoxGeometry(
 ),
 
 new THREE.MeshStandardMaterial({
-color:Math.random()*0xffffff
+color:
+Math.random()*0xffffff
 })
 
 );
@@ -195,54 +299,16 @@ scene.add(rightBuilding);
 
 
 
-/* CARS */
-
-const cars = [];
-
-function spawnCar() {
-
-const car = new THREE.Mesh(
-
-new THREE.BoxGeometry(
-2,
-1,
-4
-),
-
-new THREE.MeshStandardMaterial({
-color:0xffff00
-})
-
-);
-
-car.position.x =
-Math.random()>0.5 ? -5 : 5;
-
-car.position.y = 0;
-
-car.position.z = -80;
-
-scene.add(car);
-
-cars.push(car);
-
-}
-
-setInterval(()=>{
-
-spawnCar();
-
-},2000);
-
-
-
-/* TRAINS */
+/* =========================
+TRAINS
+========================= */
 
 const trains = [];
 
 function spawnTrain() {
 
-const train = new THREE.Mesh(
+const train =
+new THREE.Mesh(
 
 new THREE.BoxGeometry(
 5,
@@ -256,11 +322,14 @@ color:0x00ffff
 
 );
 
-const lanes = [-3,0,3];
+const lanes =
+[-3,0,3];
 
 train.position.x =
 lanes[
-Math.floor(Math.random()*3)
+Math.floor(
+Math.random()*3
+)
 ];
 
 train.position.y = 1.5;
@@ -281,13 +350,62 @@ spawnTrain();
 
 
 
-/* PLANES */
+/* =========================
+CARS
+========================= */
+
+const cars = [];
+
+function spawnCar() {
+
+const car =
+new THREE.Mesh(
+
+new THREE.BoxGeometry(
+2,
+1,
+4
+),
+
+new THREE.MeshStandardMaterial({
+color:0xffff00
+})
+
+);
+
+car.position.x =
+Math.random()>0.5
+? -5
+: 5;
+
+car.position.y = 0;
+
+car.position.z = -80;
+
+scene.add(car);
+
+cars.push(car);
+
+}
+
+setInterval(()=>{
+
+spawnCar();
+
+},2500);
+
+
+
+/* =========================
+PLANES
+========================= */
 
 const planes = [];
 
 function spawnPlane() {
 
-const plane = new THREE.Mesh(
+const plane =
+new THREE.Mesh(
 
 new THREE.BoxGeometry(
 6,
@@ -321,7 +439,9 @@ spawnPlane();
 
 
 
-/* SCORE */
+/* =========================
+GAME STATS
+========================= */
 
 let score = 0;
 
@@ -330,12 +450,17 @@ let level = 1;
 let speed = 0.7;
 
 const coinCounter = {
-count:0
+
+count:
+gameData.coins
+
 };
 
 
 
-/* SPAWNERS */
+/* =========================
+SPAWNERS
+========================= */
 
 setInterval(()=>{
 
@@ -351,42 +476,381 @@ spawnCoin(scene);
 
 
 
-/* THEMES */
+/* =========================
+SHOP MENU
+========================= */
+
+document
+.getElementById(
+'shopButton'
+)
+.addEventListener(
+'click',
+()=>{
+
+document
+.getElementById(
+'shopMenu'
+)
+.style.display =
+'flex';
+
+}
+);
+
+
+
+document
+.getElementById(
+'closeShop'
+)
+.addEventListener(
+'click',
+()=>{
+
+document
+.getElementById(
+'shopMenu'
+)
+.style.display =
+'none';
+
+}
+);
+
+
+
+/* =========================
+BUY NINJA
+========================= */
+
+document
+.getElementById(
+'buyNinja'
+)
+.addEventListener(
+'click',
+()=>{
+
+if(
+coinCounter.count >= 100
+) {
+
+coinCounter.count -= 100;
+
+player.material.color.set(
+0x111111
+);
+
+alert(
+'Ninja Unlocked'
+);
+
+saveProgress();
+
+}
+
+}
+);
+
+
+
+/* =========================
+BUY ROBOT
+========================= */
+
+document
+.getElementById(
+'buyRobot'
+)
+.addEventListener(
+'click',
+()=>{
+
+if(
+coinCounter.count >= 300
+) {
+
+coinCounter.count -= 300;
+
+player.material.color.set(
+0xaaaaaa
+);
+
+alert(
+'Robot Unlocked'
+);
+
+saveProgress();
+
+}
+
+}
+);
+
+
+
+/* =========================
+BUY FIRE
+========================= */
+
+document
+.getElementById(
+'buyFire'
+)
+.addEventListener(
+'click',
+()=>{
+
+if(
+coinCounter.count >= 1000
+) {
+
+coinCounter.count -= 1000;
+
+player.material.color.set(
+0xff3300
+);
+
+alert(
+'Fire Warrior Unlocked'
+);
+
+saveProgress();
+
+}
+
+}
+);
+
+
+
+/* =========================
+BUY GALAXY
+========================= */
+
+document
+.getElementById(
+'buyGalaxy'
+)
+.addEventListener(
+'click',
+()=>{
+
+if(
+coinCounter.count >= 10000
+) {
+
+coinCounter.count -= 10000;
+
+player.material.color.set(
+0x9900ff
+);
+
+alert(
+'Galaxy Runner Unlocked'
+);
+
+saveProgress();
+
+}
+
+}
+);
+
+
+
+/* =========================
+BUY HOVERBOARDS
+========================= */
+
+document
+.getElementById(
+'buyNeonBoard'
+)
+.addEventListener(
+'click',
+()=>{
+
+if(
+coinCounter.count >= 200
+) {
+
+coinCounter.count -= 200;
+
+hoverboard.material.color.set(
+0xff00ff
+);
+
+alert(
+'Neon Board Unlocked'
+);
+
+saveProgress();
+
+}
+
+}
+);
+
+
+
+document
+.getElementById(
+'buyIceBoard'
+)
+.addEventListener(
+'click',
+()=>{
+
+if(
+coinCounter.count >= 800
+) {
+
+coinCounter.count -= 800;
+
+hoverboard.material.color.set(
+0x66ccff
+);
+
+alert(
+'Ice Board Unlocked'
+);
+
+saveProgress();
+
+}
+
+}
+);
+
+
+
+document
+.getElementById(
+'buyLavaBoard'
+)
+.addEventListener(
+'click',
+()=>{
+
+if(
+coinCounter.count >= 2000
+) {
+
+coinCounter.count -= 2000;
+
+hoverboard.material.color.set(
+0xff2200
+);
+
+alert(
+'Lava Board Unlocked'
+);
+
+saveProgress();
+
+}
+
+}
+);
+
+
+
+document
+.getElementById(
+'buyGalaxyBoard'
+)
+.addEventListener(
+'click',
+()=>{
+
+if(
+coinCounter.count >= 15000
+) {
+
+coinCounter.count -= 15000;
+
+hoverboard.material.color.set(
+0x6600ff
+);
+
+alert(
+'Galaxy Board Unlocked'
+);
+
+saveProgress();
+
+}
+
+}
+);
+
+
+
+/* =========================
+SAVE FUNCTION
+========================= */
+
+function saveProgress() {
+
+gameData.coins =
+coinCounter.count;
+
+saveGame(gameData);
+
+}
+
+
+
+/* =========================
+THEMES
+========================= */
 
 function updateTheme() {
 
 if(level < 10) {
 
 scene.background =
-new THREE.Color(0x87ceeb);
+new THREE.Color(
+0x87ceeb
+);
 
 }
 
 else if(level < 20) {
 
 scene.background =
-new THREE.Color(0x001133);
+new THREE.Color(
+0x001133
+);
 
 }
 
 else if(level < 30) {
 
 scene.background =
-new THREE.Color(0xe6f7ff);
+new THREE.Color(
+0xe6f7ff
+);
 
 }
 
 else if(level < 40) {
 
 scene.background =
-new THREE.Color(0x330000);
+new THREE.Color(
+0x330000
+);
 
 }
 
 else {
 
 scene.background =
-new THREE.Color(0x003366);
+new THREE.Color(
+0x003366
+);
 
 }
 
@@ -394,7 +858,9 @@ new THREE.Color(0x003366);
 
 
 
-/* ANIMATION */
+/* =========================
+ANIMATE
+========================= */
 
 function animate() {
 
@@ -419,7 +885,20 @@ coinCounter
 
 
 
-/* CHASER FOLLOW */
+/* HOVERBOARD */
+
+hoverboard.position.x =
+player.position.x;
+
+hoverboard.position.z =
+player.position.z;
+
+hoverboard.position.y =
+0.2;
+
+
+
+/* CHASER */
 
 chaser.position.x =
 player.position.x;
@@ -429,38 +908,24 @@ player.position.z + 5;
 
 
 
-/* CARS MOVE */
+/* TRAINS */
 
-cars.forEach((car,index)=>{
-
-car.position.z += 1.5;
-
-if(car.position.z > 30) {
-
-scene.remove(car);
-
-cars.splice(index,1);
-
-}
-
-});
-
-
-
-/* TRAINS MOVE */
-
-trains.forEach((train,index)=>{
+trains.forEach(
+(train,index)=>{
 
 train.position.z +=
 speed * 2;
 
 if(
-train.position.distanceTo(
+train.position
+.distanceTo(
 player.position
 ) < 3
 ) {
 
-alert("HIT BY TRAIN");
+alert(
+'HIT BY TRAIN'
+);
 
 location.reload();
 
@@ -474,13 +939,35 @@ trains.splice(index,1);
 
 }
 
-});
+}
+);
 
 
 
-/* PLANES MOVE */
+/* CARS */
 
-planes.forEach((plane,index)=>{
+cars.forEach(
+(car,index)=>{
+
+car.position.z += 1.5;
+
+if(car.position.z > 40) {
+
+scene.remove(car);
+
+cars.splice(index,1);
+
+}
+
+}
+);
+
+
+
+/* PLANES */
+
+planes.forEach(
+(plane,index)=>{
 
 plane.position.z += 2;
 
@@ -492,7 +979,37 @@ planes.splice(index,1);
 
 }
 
-});
+}
+);
+
+
+
+/* TRAIL EFFECT */
+
+const trail =
+new THREE.Mesh(
+
+new THREE.SphereGeometry(
+0.08
+),
+
+new THREE.MeshBasicMaterial({
+color:0xff00ff
+})
+
+);
+
+trail.position.copy(
+player.position
+);
+
+scene.add(trail);
+
+setTimeout(()=>{
+
+scene.remove(trail);
+
+},200);
 
 
 
@@ -508,20 +1025,32 @@ updateTheme();
 
 
 
-document.getElementById(
+document
+.getElementById(
 'score'
-).innerText =
-'Score: '+score;
+)
+.innerText =
+'Score: ' + score;
 
-document.getElementById(
+
+
+document
+.getElementById(
 'coins'
-).innerText =
-'Coins: '+coinCounter.count;
+)
+.innerText =
+'Coins: ' +
+coinCounter.count;
 
-document.getElementById(
+
+
+document
+.getElementById(
 'level'
-).innerText =
-'Level: '+level;
+)
+.innerText =
+'Level: ' +
+level;
 
 
 
@@ -534,7 +1063,9 @@ camera
 
 
 
-/* START BUTTON */
+/* =========================
+START GAME
+========================= */
 
 document
 .getElementById(
@@ -544,9 +1075,11 @@ document
 'click',
 ()=>{
 
-document.getElementById(
+document
+.getElementById(
 'menu'
-).style.display =
+)
+.style.display =
 'none';
 
 animate();
