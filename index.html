@@ -4,11 +4,14 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>Metro Rush</title>
 
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet"
+href="style.css">
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
 
@@ -16,21 +19,13 @@
 
 <body>
 
+
+
+<!-- MAIN MENU -->
+
 <div id="menu">
 
 <h1>METRO RUSH</h1>
-
-<select id="musicSelect">
-
-<option value="dandelion">Dandelion</option>
-
-<option value="sodapop">Soda Pop</option>
-
-<option value="nightchanges">Night Changes</option>
-
-<option value="carolofthebells">Carol Of The Bells</option>
-
-</select>
 
 <button id="startButton">
 
@@ -39,6 +34,116 @@ START GAME
 </button>
 
 </div>
+
+
+
+<!-- SHOP BUTTON -->
+
+<button id="shopButton">
+
+SHOP
+
+</button>
+
+
+
+<!-- SHOP MENU -->
+
+<div id="shopMenu">
+
+<h1>SHOP</h1>
+
+
+
+<h2>CHARACTERS</h2>
+
+<button id="buyNinja">
+
+Ninja - 100 Coins
+
+</button>
+
+<button id="buyRobot">
+
+Robot - 300 Coins
+
+</button>
+
+<button id="buyFire">
+
+Fire Warrior - 1000 Coins
+
+</button>
+
+<button id="buyGalaxy">
+
+Galaxy Runner - 10000 Coins
+
+</button>
+
+
+
+<h2>HOVERBOARDS</h2>
+
+<button id="buyNeonBoard">
+
+Neon Board - 200 Coins
+
+</button>
+
+<button id="buyIceBoard">
+
+Ice Board - 800 Coins
+
+</button>
+
+<button id="buyLavaBoard">
+
+Lava Board - 2000 Coins
+
+</button>
+
+<button id="buyGalaxyBoard">
+
+Galaxy Board - 15000 Coins
+
+</button>
+
+
+
+<h2>RIDES</h2>
+
+<button id="buyPlane">
+
+Mini Plane - 1500 Coins
+
+</button>
+
+<button id="buyRocket">
+
+Rocket Ride - 4000 Coins
+
+</button>
+
+<button id="buyDragon">
+
+Dragon Ride - 10000 Coins
+
+</button>
+
+
+
+<button id="closeShop">
+
+CLOSE SHOP
+
+</button>
+
+</div>
+
+
+
+<!-- HUD -->
 
 <div id="hud">
 
@@ -62,7 +167,10 @@ Level: 1
 
 </div>
 
-<script type="module" src="game.js"></script>
+
+
+<script type="module"
+src="game.js"></script>
 
 </body>
 
