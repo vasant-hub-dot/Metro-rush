@@ -1,12 +1,12 @@
 import { createPlayer, movePlayer } from './player.js';
-
 import { spawnObstacle, updateObstacles } from './obstacle.js';
-
 import { spawnCoin, updateCoins } from './coins.js';
 
-const scene = new THREE.Scene();
+import { applyTheme } from './theme.js';
+import { createChaser } from './chaser.js';
+import { createSnow, updateSnow } from './particles.js';
 
-scene.background = new THREE.Color(0x000000);
+const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(
 75,
@@ -24,12 +24,9 @@ window.innerWidth,
 window.innerHeight
 );
 
-document.body.appendChild(
-renderer.domElement
-);
+document.body.appendChild(renderer.domElement);
 
-const light =
-new THREE.DirectionalLight(
+const light = new THREE.DirectionalLight(
 0xffffff,
 1
 );
@@ -38,32 +35,14 @@ light.position.set(0,10,10);
 
 scene.add(light);
 
-const ambient =
-new THREE.AmbientLight(
-0xffffff,
-0.6
-);
+const road = new THREE.Mesh(
 
-scene.add(ambient);
+new THREE.BoxGeometry(10,1,200),
 
-const roadGeometry =
-new THREE.BoxGeometry(
-10,
-1,
-200
-);
-
-const roadMaterial =
 new THREE.MeshStandardMaterial({
+color:0x333333
+})
 
-color:0x222222
-
-});
-
-const road =
-new THREE.Mesh(
-roadGeometry,
-roadMaterial
 );
 
 road.position.y = -1;
@@ -74,17 +53,21 @@ const player = createPlayer();
 
 scene.add(player);
 
+const chaser = createChaser();
+
+scene.add(chaser);
+
 camera.position.set(0,5,10);
 
 let score = 0;
-
 let level = 1;
-
 let speed = 0.5;
 
 const coinCounter = {
 count:0
 };
+
+createSnow(scene);
 
 setInterval(()=>{
 
@@ -98,47 +81,7 @@ spawnCoin(scene);
 
 },1200);
 
-const chaserGeometry =
-new THREE.BoxGeometry(1,2,1);
-
-const chaserMaterial =
-new THREE.MeshStandardMaterial({
-
-color:0xff0000
-
-});
-
-const chaser =
-new THREE.Mesh(
-chaserGeometry,
-chaserMaterial
-);
-
-chaser.position.set(0,1,15);
-
-scene.add(chaser);
-
-const planeGeometry =
-new THREE.BoxGeometry(8,2,4);
-
-const planeMaterial =
-new THREE.MeshStandardMaterial({
-
-color:0xffffff
-
-});
-
-const plane =
-new THREE.Mesh(
-planeGeometry,
-planeMaterial
-);
-
-plane.position.set(-30,25,-50);
-
-scene.add(plane);
-
-function animate(){
+function animate() {
 
 requestAnimationFrame(animate);
 
@@ -157,108 +100,36 @@ speed,
 coinCounter
 );
 
+updateSnow();
+
 score++;
 
-level =
-Math.floor(score/500)+1;
+level = Math.floor(score/500)+1;
 
-speed += 0.00005;
+speed = 0.5 + level*0.05;
 
-document.getElementById(
-'score'
-).innerText =
-'Score: '+score;
+applyTheme(scene, level);
 
-document.getElementById(
-'coins'
-).innerText =
-'Coins: '+coinCounter.count;
+document.getElementById('score').innerText =
+'Score: ' + score;
 
-document.getElementById(
-'level'
-).innerText =
-'Level: '+level;
+document.getElementById('coins').innerText =
+'Coins: ' + coinCounter.count;
 
-if(level >= 10){
+document.getElementById('level').innerText =
+'Level: ' + level;
 
-scene.background =
-new THREE.Color(0x001133);
-
-road.material.color.set(
-0x003366
-);
-
-}
-
-if(level >= 20){
-
-scene.background =
-new THREE.Color(0x220022);
-
-road.material.color.set(
-0x550055
-);
-
-}
-
-if(level >= 30){
-
-scene.background =
-new THREE.Color(0x330000);
-
-road.material.color.set(
-0x772222
-);
-
-}
-
-if(level >= 36){
-
-scene.background =
-new THREE.Color(0xbbddff);
-
-road.material.color.set(
-0xffffff
-);
-
-}
-
-chaser.position.x =
-player.position.x;
-
-chaser.position.z =
-player.position.z + 8;
-
-plane.position.x += 0.1;
-
-if(plane.position.x > 40){
-
-plane.position.x = -40;
-
-}
-
-renderer.render(
-scene,
-camera
-);
+renderer.render(scene,camera);
 
 }
 
 document
-.getElementById(
-'startButton'
-)
-.addEventListener(
-'click',
-()=>{
+.getElementById('startButton')
+.addEventListener('click',()=>{
 
-document
-.getElementById(
-'menu'
-).style.display =
+document.getElementById('menu').style.display =
 'none';
 
 animate();
 
-}
-);
+});
