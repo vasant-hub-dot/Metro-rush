@@ -6,99 +6,50 @@ let isJumping = false;
 
 const gravity = 0.02;
 
-export function createPlayer(){
 
-const playerGroup =
-new THREE.Group();
 
-const bodyGeometry =
-new THREE.BoxGeometry(
-1,
-2,
-1
+export function createPlayer() {
+
+const geometry =
+new THREE.CapsuleGeometry(
+0.6,
+1.2,
+8,
+16
 );
 
-const bodyMaterial =
+const material =
 new THREE.MeshStandardMaterial({
 
-color:0x00ffff
+color:0x00ffcc
 
 });
 
-const body =
+const player =
 new THREE.Mesh(
-bodyGeometry,
-bodyMaterial
+geometry,
+material
 );
 
-playerGroup.add(body);
+player.position.y = 1;
 
-const headGeometry =
-new THREE.SphereGeometry(
-0.5,
-32,
-32
-);
-
-const headMaterial =
-new THREE.MeshStandardMaterial({
-
-color:0xffcc99
-
-});
-
-const head =
-new THREE.Mesh(
-headGeometry,
-headMaterial
-);
-
-head.position.y = 1.7;
-
-playerGroup.add(head);
-
-const boardGeometry =
-new THREE.BoxGeometry(
-2,
-0.2,
-1
-);
-
-const boardMaterial =
-new THREE.MeshStandardMaterial({
-
-color:0xff00ff,
-emissive:0xff00ff
-
-});
-
-const board =
-new THREE.Mesh(
-boardGeometry,
-boardMaterial
-);
-
-board.position.y = -1.1;
-
-playerGroup.add(board);
-
-playerGroup.position.y = 1;
-
-return playerGroup;
+return player;
 
 }
+
+
 
 window.addEventListener(
 'keydown',
 (e)=>{
 
-if(e.key === 'ArrowLeft'){
+if(e.key === 'ArrowLeft') {
 
 lane--;
 
 }
 
-if(e.key === 'ArrowRight'){
+if(e.key === 'ArrowRight') {
 
 lane++;
 
@@ -106,9 +57,9 @@ lane++;
 
 if(e.key === ' ') {
 
-if(!isJumping){
+if(!isJumping) {
 
-velocityY = 0. 55;
+velocityY = 0.55;
 
 isJumping = true;
 
@@ -125,7 +76,9 @@ Math.min(1,lane)
 }
 );
 
-export function movePlayer(player){
+
+
+export function movePlayer(player) {
 
 player.position.x =
 lane * 3;
@@ -135,7 +88,7 @@ velocityY;
 
 velocityY -= gravity;
 
-if(player.position.y <= 1){
+if(player.position.y <= 1) {
 
 player.position.y = 1;
 
