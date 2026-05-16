@@ -1,4 +1,3 @@
-
 let lane = 0;
 
 let velocityY = 0;
@@ -9,7 +8,10 @@ const gravity = 0.02;
 
 export function createPlayer() {
 
-const geometry =
+const playerGroup =
+new THREE.Group();
+
+const bodyGeometry =
 new THREE.CapsuleGeometry(
 0.6,
 1.2,
@@ -17,24 +19,51 @@ new THREE.CapsuleGeometry(
 16
 );
 
-const material =
+const bodyMaterial =
 new THREE.MeshStandardMaterial({
 
-color: 0xffd700,
+color: 0x00ffff,
 metalness: 1,
 roughness: 0.2
 
 });
 
-const player =
+const body =
 new THREE.Mesh(
-geometry,
-material
+bodyGeometry,
+bodyMaterial
 );
 
-player.position.y = 1;
+playerGroup.add(body);
 
-return player;
+const boardGeometry =
+new THREE.BoxGeometry(
+2,
+0.2,
+1
+);
+
+const boardMaterial =
+new THREE.MeshStandardMaterial({
+
+color: 0xff00ff,
+emissive: 0xff00ff
+
+});
+
+const board =
+new THREE.Mesh(
+boardGeometry,
+boardMaterial
+);
+
+board.position.y = -1;
+
+playerGroup.add(board);
+
+playerGroup.position.y = 1;
+
+return playerGroup;
 
 }
 
