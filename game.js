@@ -8,13 +8,13 @@ scene.background = new THREE.Color(0x87ceeb);
 
 const camera = new THREE.PerspectiveCamera(
 75,
-window.innerWidth / window.innerHeight,
+window.innerWidth/window.innerHeight,
 0.1,
 1000
 );
 
 const renderer = new THREE.WebGLRenderer({
-antialias: true
+antialias:true
 });
 
 renderer.setSize(
@@ -28,9 +28,7 @@ renderer.domElement
 
 
 
-/* =========================
-   LIGHTS
-========================= */
+/* LIGHTS */
 
 const light =
 new THREE.DirectionalLight(
@@ -42,26 +40,23 @@ light.position.set(0,20,10);
 
 scene.add(light);
 
-const ambient =
+scene.add(
 new THREE.AmbientLight(
 0xffffff,
-0.7
+0.8
+)
 );
 
-scene.add(ambient);
 
 
-
-/* =========================
-   ROAD
-========================= */
+/* ROAD */
 
 const road = new THREE.Mesh(
 
 new THREE.BoxGeometry(
-12,
+14,
 1,
-400
+500
 ),
 
 new THREE.MeshStandardMaterial({
@@ -76,40 +71,38 @@ scene.add(road);
 
 
 
-/* =========================
-   PLAYER
-========================= */
+/* PLAYER */
 
 const player = createPlayer();
 
 scene.add(player);
 
+
+
+/* CAMERA */
+
 camera.position.set(
 0,
-8,
-22
+7,
+15
 );
 
 camera.lookAt(
 0,
 2,
--30
+-20
 );
 
 
 
-/* =========================
-   CHASER
-========================= */
+/* CHASER */
 
-const chaser =
-new THREE.Group();
+const chaser = new THREE.Group();
 
-const chaserBody =
-new THREE.Mesh(
+const body = new THREE.Mesh(
 
 new THREE.BoxGeometry(
-1.2,
+1.5,
 2,
 1
 ),
@@ -120,13 +113,12 @@ color:0xff0000
 
 );
 
-chaserBody.position.y = 1.5;
+body.position.y = 1.5;
 
-const chaserHead =
-new THREE.Mesh(
+const head = new THREE.Mesh(
 
 new THREE.SphereGeometry(
-0.5,
+0.6,
 32,
 32
 ),
@@ -137,81 +129,73 @@ color:0xffcc99
 
 );
 
-chaserHead.position.y = 3;
+head.position.y = 3;
 
-chaser.add(chaserBody);
+chaser.add(body);
 
-chaser.add(chaserHead);
-
-chaser.position.set(
-0,
-0,
-8
-);
+chaser.add(head);
 
 scene.add(chaser);
 
 
 
-/* =========================
-   BUILDINGS
-========================= */
+/* BUILDINGS */
 
-const buildings = [];
+for(let i=0;i<40;i++) {
 
-function createBuilding(x,z) {
-
-const height =
-10 + Math.random()*25;
-
-const building = new THREE.Mesh(
+const leftBuilding =
+new THREE.Mesh(
 
 new THREE.BoxGeometry(
-8,
-height,
-8
+10,
+20 + Math.random()*20,
+10
 ),
 
 new THREE.MeshStandardMaterial({
-
-color:
-Math.random()*0xffffff
-
+color:Math.random()*0xffffff
 })
 
 );
 
-building.position.set(
-x,
-height/2 -1,
-z
-);
-
-scene.add(building);
-
-buildings.push(building);
-
-}
-
-for(let i=0;i<80;i++) {
-
-createBuilding(
--25,
+leftBuilding.position.set(
+-12,
+8,
 -i*20
 );
 
-createBuilding(
-25,
+scene.add(leftBuilding);
+
+
+
+const rightBuilding =
+new THREE.Mesh(
+
+new THREE.BoxGeometry(
+10,
+20 + Math.random()*20,
+10
+),
+
+new THREE.MeshStandardMaterial({
+color:Math.random()*0xffffff
+})
+
+);
+
+rightBuilding.position.set(
+12,
+8,
 -i*20
 );
+
+scene.add(rightBuilding);
 
 }
 
 
 
-/* =========================
-   MOVING CARS
-========================= */
+/* CARS */
 
 const cars = [];
 
@@ -220,22 +204,23 @@ function spawnCar() {
 const car = new THREE.Mesh(
 
 new THREE.BoxGeometry(
-3,
-1.5,
-6
+2,
+1,
+4
 ),
 
 new THREE.MeshStandardMaterial({
-color:0xff0000
+color:0xffff00
 })
 
 );
 
-car.position.set(
-Math.random()>0.5 ? -6 : 6,
-0,
--150
-);
+car.position.x =
+Math.random()>0.5 ? -5 : 5;
+
+car.position.y = 0;
+
+car.position.z = -80;
 
 scene.add(car);
 
@@ -247,13 +232,11 @@ setInterval(()=>{
 
 spawnCar();
 
-},3000);
+},2000);
 
 
 
-/* =========================
-   MOVING TRAINS
-========================= */
+/* TRAINS */
 
 const trains = [];
 
@@ -262,13 +245,13 @@ function spawnTrain() {
 const train = new THREE.Mesh(
 
 new THREE.BoxGeometry(
-4,
-4,
-18
+5,
+5,
+20
 ),
 
 new THREE.MeshStandardMaterial({
-color:0x00ffcc
+color:0x00ffff
 })
 
 );
@@ -282,7 +265,7 @@ Math.floor(Math.random()*3)
 
 train.position.y = 1.5;
 
-train.position.z = -200;
+train.position.z = -150;
 
 scene.add(train);
 
@@ -294,24 +277,22 @@ setInterval(()=>{
 
 spawnTrain();
 
-},5000);
+},4000);
 
 
 
-/* =========================
-   PLANES
-========================= */
+/* PLANES */
 
 const planes = [];
 
-function createPlane() {
+function spawnPlane() {
 
 const plane = new THREE.Mesh(
 
 new THREE.BoxGeometry(
-4,
+6,
 1,
-2
+3
 ),
 
 new THREE.MeshStandardMaterial({
@@ -321,8 +302,8 @@ color:0xffffff
 );
 
 plane.position.set(
-(Math.random()-0.5)*40,
-20,
+0,
+15,
 -100
 );
 
@@ -334,145 +315,19 @@ planes.push(plane);
 
 setInterval(()=>{
 
-createPlane();
+spawnPlane();
 
-},7000);
-
-
-
-/* =========================
-   TRAFFIC LIGHTS
-========================= */
-
-for(let i=0;i<20;i++) {
-
-const pole = new THREE.Mesh(
-
-new THREE.CylinderGeometry(
-0.1,
-0.1,
-5
-),
-
-new THREE.MeshStandardMaterial({
-color:0x333333
-})
-
-);
-
-pole.position.set(
--7,
-2,
--i*30
-);
-
-scene.add(pole);
-
-const redLight = new THREE.Mesh(
-
-new THREE.SphereGeometry(
-0.3
-),
-
-new THREE.MeshBasicMaterial({
-color:0xff0000
-})
-
-);
-
-redLight.position.set(
--7,
-4,
--i*30
-);
-
-scene.add(redLight);
-
-}
+},6000);
 
 
 
-/* =========================
-   SNOW PARTICLES
-========================= */
-
-const snow = [];
-
-for(let i=0;i<300;i++) {
-
-const particle =
-new THREE.Mesh(
-
-new THREE.SphereGeometry(
-0.05
-),
-
-new THREE.MeshBasicMaterial({
-color:0xffffff
-})
-
-);
-
-particle.position.set(
-(Math.random()-0.5)*50,
-Math.random()*20,
-(Math.random()-0.5)*200
-);
-
-scene.add(particle);
-
-snow.push(particle);
-
-}
-
-
-
-/* =========================
-   RAIN PARTICLES
-========================= */
-
-const rain = [];
-
-for(let i=0;i<300;i++) {
-
-const drop =
-new THREE.Mesh(
-
-new THREE.BoxGeometry(
-0.03,
-0.5,
-0.03
-),
-
-new THREE.MeshBasicMaterial({
-color:0x66ccff
-})
-
-);
-
-drop.position.set(
-(Math.random()-0.5)*50,
-Math.random()*20,
-(Math.random()-0.5)*200
-);
-
-scene.add(drop);
-
-rain.push(drop);
-
-}
-
-
-
-/* =========================
-   GAME STATS
-========================= */
+/* SCORE */
 
 let score = 0;
 
 let level = 1;
 
-let speed = 0.6;
+let speed = 0.7;
 
 const coinCounter = {
 count:0
@@ -480,9 +335,7 @@ count:0
 
 
 
-/* =========================
-   SPAWNERS
-========================= */
+/* SPAWNERS */
 
 setInterval(()=>{
 
@@ -498,9 +351,7 @@ spawnCoin(scene);
 
 
 
-/* =========================
-   THEMES
-========================= */
+/* THEMES */
 
 function updateTheme() {
 
@@ -509,20 +360,12 @@ if(level < 10) {
 scene.background =
 new THREE.Color(0x87ceeb);
 
-road.material.color.set(
-0x444444
-);
-
 }
 
 else if(level < 20) {
 
 scene.background =
 new THREE.Color(0x001133);
-
-road.material.color.set(
-0x223388
-);
 
 }
 
@@ -531,20 +374,12 @@ else if(level < 30) {
 scene.background =
 new THREE.Color(0xe6f7ff);
 
-road.material.color.set(
-0xdddddd
-);
-
 }
 
 else if(level < 40) {
 
 scene.background =
-new THREE.Color(0x220000);
-
-road.material.color.set(
-0x552222
-);
+new THREE.Color(0x330000);
 
 }
 
@@ -553,19 +388,13 @@ else {
 scene.background =
 new THREE.Color(0x003366);
 
-road.material.color.set(
-0x006699
-);
-
 }
 
 }
 
 
 
-/* =========================
-   ANIMATE
-========================= */
+/* ANIMATION */
 
 function animate() {
 
@@ -590,25 +419,21 @@ coinCounter
 
 
 
-/* =========================
-   CHASER
-========================= */
+/* CHASER FOLLOW */
 
 chaser.position.x =
 player.position.x;
 
 chaser.position.z =
-player.position.z + 6;
+player.position.z + 5;
 
 
 
-/* =========================
-   CARS
-========================= */
+/* CARS MOVE */
 
 cars.forEach((car,index)=>{
 
-car.position.z += 2;
+car.position.z += 1.5;
 
 if(car.position.z > 30) {
 
@@ -622,9 +447,7 @@ cars.splice(index,1);
 
 
 
-/* =========================
-   TRAINS
-========================= */
+/* TRAINS MOVE */
 
 trains.forEach((train,index)=>{
 
@@ -643,7 +466,7 @@ location.reload();
 
 }
 
-if(train.position.z > 30) {
+if(train.position.z > 40) {
 
 scene.remove(train);
 
@@ -655,79 +478,17 @@ trains.splice(index,1);
 
 
 
-/* =========================
-   PLANES
-========================= */
+/* PLANES MOVE */
 
 planes.forEach((plane,index)=>{
 
-plane.position.z += 1;
+plane.position.z += 2;
 
-if(plane.position.z > 40) {
+if(plane.position.z > 50) {
 
 scene.remove(plane);
 
 planes.splice(index,1);
-
-}
-
-});
-
-
-
-/* =========================
-   SNOW
-========================= */
-
-snow.forEach(p=>{
-
-if(level >= 20 && level < 30) {
-
-p.visible = true;
-
-p.position.y -= 0.1;
-
-if(p.position.y < 0) {
-
-p.position.y = 20;
-
-}
-
-}
-
-else {
-
-p.visible = false;
-
-}
-
-});
-
-
-
-/* =========================
-   RAIN
-========================= */
-
-rain.forEach(r=>{
-
-if(level >= 10 && level < 20) {
-
-r.visible = true;
-
-r.position.y -= 0.5;
-
-if(r.position.y < 0) {
-
-r.position.y = 20;
-
-}
-
-}
-
-else {
-
-r.visible = false;
 
 }
 
@@ -741,7 +502,7 @@ level =
 Math.floor(score/500)+1;
 
 speed =
-0.6 + level*0.03;
+0.7 + level*0.03;
 
 updateTheme();
 
@@ -750,17 +511,17 @@ updateTheme();
 document.getElementById(
 'score'
 ).innerText =
-'Score: ' + score;
+'Score: '+score;
 
 document.getElementById(
 'coins'
 ).innerText =
-'Coins: ' + coinCounter.count;
+'Coins: '+coinCounter.count;
 
 document.getElementById(
 'level'
 ).innerText =
-'Level: ' + level;
+'Level: '+level;
 
 
 
@@ -773,9 +534,7 @@ camera
 
 
 
-/* =========================
-   START GAME
-========================= */
+/* START BUTTON */
 
 document
 .getElementById(
