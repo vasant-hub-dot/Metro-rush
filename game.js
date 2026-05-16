@@ -4,15 +4,17 @@ import { spawnCoin, updateCoins } from './coins.js';
 
 const scene = new THREE.Scene();
 
+scene.background = new THREE.Color(0x87ceeb);
+
 const camera = new THREE.PerspectiveCamera(
 75,
-window.innerWidth/window.innerHeight,
+window.innerWidth / window.innerHeight,
 0.1,
 1000
 );
 
 const renderer = new THREE.WebGLRenderer({
-antialias:true
+antialias: true
 });
 
 renderer.setSize(
@@ -23,8 +25,6 @@ window.innerHeight
 document.body.appendChild(
 renderer.domElement
 );
-
-
 
 
 
@@ -52,15 +52,17 @@ scene.add(ambient);
 
 
 
-
-
 /* =========================
    ROAD
 ========================= */
 
 const road = new THREE.Mesh(
 
-new THREE.BoxGeometry(12,1,400),
+new THREE.BoxGeometry(
+12,
+1,
+400
+),
 
 new THREE.MeshStandardMaterial({
 color:0x444444
@@ -74,8 +76,6 @@ scene.add(road);
 
 
 
-
-
 /* =========================
    PLAYER
 ========================= */
@@ -84,9 +84,17 @@ const player = createPlayer();
 
 scene.add(player);
 
-camera.position.set(0,6,12);
+camera.position.set(
+0,
+8,
+22
+);
 
-
+camera.lookAt(
+0,
+2,
+-30
+);
 
 
 
@@ -94,11 +102,17 @@ camera.position.set(0,6,12);
    CHASER
 ========================= */
 
-const chaser = new THREE.Group();
+const chaser =
+new THREE.Group();
 
-const chaserBody = new THREE.Mesh(
+const chaserBody =
+new THREE.Mesh(
 
-new THREE.BoxGeometry(1.2,2,1),
+new THREE.BoxGeometry(
+1.2,
+2,
+1
+),
 
 new THREE.MeshStandardMaterial({
 color:0xff0000
@@ -108,9 +122,14 @@ color:0xff0000
 
 chaserBody.position.y = 1.5;
 
-const chaserHead = new THREE.Mesh(
+const chaserHead =
+new THREE.Mesh(
 
-new THREE.SphereGeometry(0.5,32,32),
+new THREE.SphereGeometry(
+0.5,
+32,
+32
+),
 
 new THREE.MeshStandardMaterial({
 color:0xffcc99
@@ -124,11 +143,13 @@ chaser.add(chaserBody);
 
 chaser.add(chaserHead);
 
-chaser.position.set(0,0,18);
+chaser.position.set(
+0,
+0,
+8
+);
 
 scene.add(chaser);
-
-
 
 
 
@@ -141,14 +162,14 @@ const buildings = [];
 function createBuilding(x,z) {
 
 const height =
-5 + Math.random()*15;
+10 + Math.random()*25;
 
 const building = new THREE.Mesh(
 
 new THREE.BoxGeometry(
-5,
+8,
 height,
-5
+8
 ),
 
 new THREE.MeshStandardMaterial({
@@ -172,21 +193,19 @@ buildings.push(building);
 
 }
 
-for(let i=0;i<50;i++) {
+for(let i=0;i<80;i++) {
 
 createBuilding(
--15,
+-25,
 -i*20
 );
 
 createBuilding(
-15,
+25,
 -i*20
 );
 
 }
-
-
 
 
 
@@ -200,18 +219,22 @@ function spawnCar() {
 
 const car = new THREE.Mesh(
 
-new THREE.BoxGeometry(2,1,4),
+new THREE.BoxGeometry(
+3,
+1.5,
+6
+),
 
 new THREE.MeshStandardMaterial({
-color:0xffff00
+color:0xff0000
 })
 
 );
 
 car.position.set(
-Math.random()>0.5 ? -8 : 8,
+Math.random()>0.5 ? -6 : 6,
 0,
--100
+-150
 );
 
 scene.add(car);
@@ -228,6 +251,51 @@ spawnCar();
 
 
 
+/* =========================
+   MOVING TRAINS
+========================= */
+
+const trains = [];
+
+function spawnTrain() {
+
+const train = new THREE.Mesh(
+
+new THREE.BoxGeometry(
+4,
+4,
+18
+),
+
+new THREE.MeshStandardMaterial({
+color:0x00ffcc
+})
+
+);
+
+const lanes = [-3,0,3];
+
+train.position.x =
+lanes[
+Math.floor(Math.random()*3)
+];
+
+train.position.y = 1.5;
+
+train.position.z = -200;
+
+scene.add(train);
+
+trains.push(train);
+
+}
+
+setInterval(()=>{
+
+spawnTrain();
+
+},5000);
+
 
 
 /* =========================
@@ -240,7 +308,11 @@ function createPlane() {
 
 const plane = new THREE.Mesh(
 
-new THREE.BoxGeometry(4,1,2),
+new THREE.BoxGeometry(
+4,
+1,
+2
+),
 
 new THREE.MeshStandardMaterial({
 color:0xffffff
@@ -265,8 +337,6 @@ setInterval(()=>{
 createPlane();
 
 },7000);
-
-
 
 
 
@@ -300,7 +370,9 @@ scene.add(pole);
 
 const redLight = new THREE.Mesh(
 
-new THREE.SphereGeometry(0.3),
+new THREE.SphereGeometry(
+0.3
+),
 
 new THREE.MeshBasicMaterial({
 color:0xff0000
@@ -320,19 +392,20 @@ scene.add(redLight);
 
 
 
-
-
 /* =========================
-   SNOW
+   SNOW PARTICLES
 ========================= */
 
 const snow = [];
 
 for(let i=0;i<300;i++) {
 
-const particle = new THREE.Mesh(
+const particle =
+new THREE.Mesh(
 
-new THREE.SphereGeometry(0.05),
+new THREE.SphereGeometry(
+0.05
+),
 
 new THREE.MeshBasicMaterial({
 color:0xffffff
@@ -354,17 +427,16 @@ snow.push(particle);
 
 
 
-
-
 /* =========================
-   RAIN
+   RAIN PARTICLES
 ========================= */
 
 const rain = [];
 
 for(let i=0;i<300;i++) {
 
-const drop = new THREE.Mesh(
+const drop =
+new THREE.Mesh(
 
 new THREE.BoxGeometry(
 0.03,
@@ -392,8 +464,6 @@ rain.push(drop);
 
 
 
-
-
 /* =========================
    GAME STATS
 ========================= */
@@ -407,8 +477,6 @@ let speed = 0.6;
 const coinCounter = {
 count:0
 };
-
-
 
 
 
@@ -427,8 +495,6 @@ setInterval(()=>{
 spawnCoin(scene);
 
 },1000);
-
-
 
 
 
@@ -497,8 +563,6 @@ road.material.color.set(
 
 
 
-
-
 /* =========================
    ANIMATE
 ========================= */
@@ -526,8 +590,6 @@ coinCounter
 
 
 
-
-
 /* =========================
    CHASER
 ========================= */
@@ -536,9 +598,7 @@ chaser.position.x =
 player.position.x;
 
 chaser.position.z =
-player.position.z + 18;
-
-
+player.position.z + 6;
 
 
 
@@ -548,9 +608,9 @@ player.position.z + 18;
 
 cars.forEach((car,index)=>{
 
-car.position.z += 1;
+car.position.z += 2;
 
-if(car.position.z > 20) {
+if(car.position.z > 30) {
 
 scene.remove(car);
 
@@ -561,6 +621,37 @@ cars.splice(index,1);
 });
 
 
+
+/* =========================
+   TRAINS
+========================= */
+
+trains.forEach((train,index)=>{
+
+train.position.z +=
+speed * 2;
+
+if(
+train.position.distanceTo(
+player.position
+) < 3
+) {
+
+alert("HIT BY TRAIN");
+
+location.reload();
+
+}
+
+if(train.position.z > 30) {
+
+scene.remove(train);
+
+trains.splice(index,1);
+
+}
+
+});
 
 
 
@@ -581,8 +672,6 @@ planes.splice(index,1);
 }
 
 });
-
-
 
 
 
@@ -616,8 +705,6 @@ p.visible = false;
 
 
 
-
-
 /* =========================
    RAIN
 ========================= */
@@ -648,34 +735,34 @@ r.visible = false;
 
 
 
-
-
 score++;
 
-level = Math.floor(score/500)+1;
+level =
+Math.floor(score/500)+1;
 
-speed = 0.6 + level*0.03;
+speed =
+0.6 + level*0.03;
 
 updateTheme();
-
-
 
 
 
 document.getElementById(
 'score'
 ).innerText =
-'Score: '+score;
+'Score: ' + score;
 
 document.getElementById(
 'coins'
 ).innerText =
-'Coins: '+coinCounter.count;
+'Coins: ' + coinCounter.count;
 
 document.getElementById(
 'level'
 ).innerText =
-'Level: '+level;
+'Level: ' + level;
+
+
 
 renderer.render(
 scene,
@@ -683,8 +770,6 @@ camera
 );
 
 }
-
-
 
 
 
