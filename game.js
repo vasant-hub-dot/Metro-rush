@@ -158,7 +158,7 @@ chaserGroup.add(chaserEye1);
 
 chaserGroup.add(chaserEye2);
 
-chaserGroup.position.set(0,0,-8);
+chaserGroup.position.set(0,0,18);
 
 scene.add(chaserGroup);
 
@@ -456,8 +456,11 @@ coinCounter
    CHASER MOVEMENT
 ========================= */
 
-chaserGroup.position.x +=
-(player.position.x - chaserGroup.position.x) * 0.05;
+chaserGroup.position.x =
+player.position.x;
+
+chaserGroup.position.z =
+player.position.z + 18;
 
 
 
