@@ -1,12 +1,15 @@
 let audioContext;
+let oscillator;
 
 export function playMusic(trackName) {
 
 audioContext =
-new (window.AudioContext ||
-window.webkitAudioContext)();
+new (
+window.AudioContext ||
+window.webkitAudioContext
+)();
 
-const oscillator =
+oscillator =
 audioContext.createOscillator();
 
 const gainNode =
@@ -14,7 +17,11 @@ audioContext.createGain();
 
 oscillator.connect(gainNode);
 
-gainNode.connect(audioContext.destination);
+gainNode.connect(
+audioContext.destination
+);
+
+oscillator.type = 'sine';
 
 if(trackName === 'dandelion') {
 
@@ -40,9 +47,7 @@ oscillator.frequency.value = 400;
 
 }
 
-oscillator.type = 'sine';
-
-gainNode.gain.value = 0.03;
+gainNode.gain.value = 0.05;
 
 oscillator.start();
 
