@@ -2,42 +2,93 @@ const obstacles = [];
 
 export function spawnObstacle(scene) {
 
-const geometry = new THREE.BoxGeometry(3,4,10);
+const trainGroup = new THREE.Group();
 
-const material = new THREE.MeshStandardMaterial({
+const bodyGeometry =
+new THREE.BoxGeometry(4,4,12);
 
-color: 0x555555,
-metalness: 0.8
+const bodyMaterial =
+new THREE.MeshStandardMaterial({
+
+color: 0x0066ff,
+metalness: 0.8,
+roughness: 0.3
 
 });
 
-const obstacle = new THREE.Mesh(geometry, material);
+const body =
+new THREE.Mesh(
+bodyGeometry,
+bodyMaterial
+);
 
-const lanes = [-3,0,3];
+trainGroup.add(body);
 
-obstacle.position.x =
-lanes[Math.floor(Math.random()*lanes.length)];
+const windowGeometry =
+new THREE.BoxGeometry(3,1,0.2);
 
-obstacle.position.z = -120;
-obstacle.position.y = 2;
+const windowMaterial =
+new THREE.MeshStandardMaterial({
 
-scene.add(obstacle);
+color: 0x99ddff,
+emissive: 0x222244
 
-obstacles.push(obstacle);
+});
+
+for(let i=-1; i<=1; i++) {
+
+const win =
+new THREE.Mesh(
+windowGeometry,
+windowMaterial
+);
+
+win.position.set(0,1,i*3);
+
+win.position.z += 6;
+
+trainGroup.add(win);
 
 }
 
-export function updateObstacles(scene,player,speed) {
+const lanes = [-3,0,3];
+
+trainGroup.position.x =
+lanes[
+Math.floor(
+Math.random()*lanes.length
+)
+];
+
+trainGroup.position.z = -120;
+
+trainGroup.position.y = 2;
+
+scene.add(trainGroup);
+
+obstacles.push(trainGroup);
+
+}
+
+export function updateObstacles(
+scene,
+player,
+speed
+) {
 
 obstacles.forEach((obs,index)=>{
 
 obs.position.z += speed;
 
-const distance = obs.position.distanceTo(player.position);
+const distance =
+obs.position.distanceTo(
+player.position
+);
 
-if(distance < 2.5) {
+if(distance < 3) {
 
 alert('GAME OVER');
+
 location.reload();
 
 }
@@ -45,6 +96,7 @@ location.reload();
 if(obs.position.z > 20) {
 
 scene.remove(obs);
+
 obstacles.splice(index,1);
 
 }
