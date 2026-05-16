@@ -2,10 +2,15 @@ const obstacles = [];
 
 export function spawnObstacle(scene) {
 
-const trainGroup = new THREE.Group();
+const trainGroup =
+new THREE.Group();
 
 const bodyGeometry =
-new THREE.BoxGeometry(4,4,12);
+new THREE.BoxGeometry(
+4,
+4,
+12
+);
 
 const bodyMaterial =
 new THREE.MeshStandardMaterial({
@@ -25,7 +30,11 @@ bodyMaterial
 trainGroup.add(body);
 
 const windowGeometry =
-new THREE.BoxGeometry(3,1,0.2);
+new THREE.BoxGeometry(
+3,
+1,
+0.2
+);
 
 const windowMaterial =
 new THREE.MeshStandardMaterial({
@@ -43,7 +52,11 @@ windowGeometry,
 windowMaterial
 );
 
-win.position.set(0,1,i*3);
+win.position.set(
+0,
+1,
+i*3
+);
 
 win.position.z += 6;
 
