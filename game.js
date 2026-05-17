@@ -43,8 +43,7 @@ window.innerHeight
 );
 
 document.body.appendChild(
-renderer.domElement
-);
+renderer.domElement);
 
 
 
@@ -81,7 +80,7 @@ new THREE.Mesh(
 new THREE.BoxGeometry(
 14,
 1,
-500
+1000
 ),
 
 new THREE.MeshStandardMaterial({
@@ -101,14 +100,18 @@ scene.add(road);
 const player =
 createPlayer();
 
-const playerMaterial =
-player.material;
-
 scene.add(player);
 
 
 
-/* CAMERA */
+/* PLAYER MATERIAL */
+
+const playerMaterial =
+player.material;
+
+
+
+/* CAMERA POSITION */
 
 camera.position.set(
 0,
@@ -124,14 +127,14 @@ camera.lookAt(
 
 
 
-/* SAVED COINS */
+/* SAVE COINS */
 
 let savedCoins =
 localStorage.getItem(
 'metroCoins'
 );
 
-if(savedCoins === null) {
+if(savedCoins === null){
 
 savedCoins = 50000;
 
@@ -142,12 +145,28 @@ savedCoins
 
 }
 
+
+
 const coinCounter = {
 
 count:
 Number(savedCoins)
 
 };
+
+
+
+/* GAME VARIABLES */
+
+let score = 0;
+
+let level = 1;
+
+let speed = 1;
+
+let paused = false;
+
+let gameEnded = false;
 
 
 
@@ -197,14 +216,14 @@ scene.add(chaser);
 
 /* BUILDINGS */
 
-for(let i=0;i<40;i++) {
+for(let i=0;i<80;i++){
 
 const left =
 new THREE.Mesh(
 
 new THREE.BoxGeometry(
 10,
-20 + Math.random()*20,
+20 + Math.random()*40,
 10
 ),
 
@@ -216,7 +235,7 @@ Math.random()*0xffffff
 );
 
 left.position.set(
--15,
+-18,
 10,
 -i*20
 );
@@ -230,7 +249,7 @@ new THREE.Mesh(
 
 new THREE.BoxGeometry(
 10,
-20 + Math.random()*20,
+20 + Math.random()*40,
 10
 ),
 
@@ -242,7 +261,7 @@ Math.random()*0xffffff
 );
 
 right.position.set(
-15,
+18,
 10,
 -i*20
 );
@@ -257,7 +276,7 @@ scene.add(right);
 
 const trains = [];
 
-function spawnTrain() {
+function spawnTrain(){
 
 const train =
 new THREE.Mesh(
@@ -279,9 +298,7 @@ const lanes =
 
 train.position.x =
 lanes[
-Math.floor(
-Math.random()*3
-)
+Math.floor(Math.random()*3)
 ];
 
 train.position.y = 2;
@@ -296,7 +313,11 @@ trains.push(train);
 
 setInterval(()=>{
 
+if(!paused){
+
 spawnTrain();
+
+}
 
 },4000);
 
@@ -306,7 +327,7 @@ spawnTrain();
 
 const cars = [];
 
-function spawnCar() {
+function spawnCar(){
 
 const car =
 new THREE.Mesh(
@@ -323,12 +344,17 @@ color:0xffff00
 
 );
 
-car.position.x =
-Math.random()>0.5
-? -5
-: 5;
+const lanes =
+[-3,0,3];
 
-car.position.z = -80;
+car.position.x =
+lanes[
+Math.floor(Math.random()*3)
+];
+
+car.position.y = 0;
+
+car.position.z = -120;
 
 scene.add(car);
 
@@ -338,7 +364,11 @@ cars.push(car);
 
 setInterval(()=>{
 
+if(!paused){
+
 spawnCar();
+
+}
 
 },2500);
 
@@ -348,7 +378,7 @@ spawnCar();
 
 const planes = [];
 
-function spawnPlane() {
+function spawnPlane(){
 
 const plane =
 new THREE.Mesh(
@@ -367,8 +397,8 @@ color:0xffffff
 
 plane.position.set(
 0,
-15,
--100
+20,
+-200
 );
 
 scene.add(plane);
@@ -379,33 +409,37 @@ planes.push(plane);
 
 setInterval(()=>{
 
+if(!paused){
+
 spawnPlane();
+
+}
 
 },7000);
 
 
 
-/* GAME STATS */
-
-let score = 0;
-
-let level = 1;
-
-let speed = 0.7;
-
-
-
-/* SPAWNERS */
+/* OBSTACLES + COINS */
 
 setInterval(()=>{
+
+if(!paused){
 
 spawnObstacle(scene);
 
+}
+
 },1200);
+
+
 
 setInterval(()=>{
 
+if(!paused){
+
 spawnCoin(scene);
+
+}
 
 },1000);
 
@@ -427,13 +461,6 @@ document
 )
 .style.display =
 'flex';
-
-document
-.getElementById(
-'hud'
-)
-.style.display =
-'none';
 
 }
 );
@@ -457,19 +484,35 @@ document
 .style.display =
 'none';
 
+}
+);
+
+
+
+/* PAUSE */
+
 document
 .getElementById(
-'hud'
+'pauseButton'
 )
-.style.display =
-'block';
+.addEventListener(
+'click',
+()=>{
+
+paused = !paused;
+
+if(!paused){
+
+animate();
+
+}
 
 }
 );
 
 
 
-/* BUY NINJA */
+/* CHARACTER SHOP */
 
 document
 .getElementById(
@@ -481,7 +524,7 @@ document
 
 if(
 coinCounter.count >= 100
-) {
+){
 
 coinCounter.count -= 100;
 
@@ -494,26 +537,12 @@ playerMaterial.color.set(
 0x111111
 );
 
-document
-.getElementById(
-'shopCoins'
-).innerText =
-
-'Coins: ' +
-coinCounter.count;
-
-alert(
-'Ninja Equipped'
-);
-
 }
 
 }
 );
 
 
-
-/* BUY ROBOT */
 
 document
 .getElementById(
@@ -525,7 +554,7 @@ document
 
 if(
 coinCounter.count >= 300
-) {
+){
 
 coinCounter.count -= 300;
 
@@ -538,26 +567,12 @@ playerMaterial.color.set(
 0xaaaaaa
 );
 
-document
-.getElementById(
-'shopCoins'
-).innerText =
-
-'Coins: ' +
-coinCounter.count;
-
-alert(
-'Robot Equipped'
-);
-
 }
 
 }
 );
 
 
-
-/* BUY FIRE */
 
 document
 .getElementById(
@@ -569,7 +584,7 @@ document
 
 if(
 coinCounter.count >= 1000
-) {
+){
 
 coinCounter.count -= 1000;
 
@@ -582,26 +597,12 @@ playerMaterial.color.set(
 0xff3300
 );
 
-document
-.getElementById(
-'shopCoins'
-).innerText =
-
-'Coins: ' +
-coinCounter.count;
-
-alert(
-'Fire Warrior Equipped'
-);
-
 }
 
 }
 );
 
 
-
-/* BUY GALAXY */
 
 document
 .getElementById(
@@ -613,7 +614,7 @@ document
 
 if(
 coinCounter.count >= 10000
-) {
+){
 
 coinCounter.count -= 10000;
 
@@ -626,188 +627,6 @@ playerMaterial.color.set(
 0x9900ff
 );
 
-document
-.getElementById(
-'shopCoins'
-).innerText =
-
-'Coins: ' +
-coinCounter.count;
-
-alert(
-'Galaxy Runner Equipped'
-);
-
-}
-
-}
-);
-
-
-
-/* BUY HOVERBOARDS */
-
-document
-.getElementById(
-'buyNeonBoard'
-)
-.addEventListener(
-'click',
-()=>{
-
-if(
-coinCounter.count >= 200
-) {
-
-coinCounter.count -= 200;
-
-localStorage.setItem(
-'metroCoins',
-coinCounter.count
-);
-
-hoverboard.material.color.set(
-0xff00ff
-);
-
-document
-.getElementById(
-'shopCoins'
-).innerText =
-
-'Coins: ' +
-coinCounter.count;
-
-alert(
-'Neon Board Equipped'
-);
-
-}
-
-}
-);
-
-
-
-document
-.getElementById(
-'buyIceBoard'
-)
-.addEventListener(
-'click',
-()=>{
-
-if(
-coinCounter.count >= 800
-) {
-
-coinCounter.count -= 800;
-
-localStorage.setItem(
-'metroCoins',
-coinCounter.count
-);
-
-hoverboard.material.color.set(
-0x66ccff
-);
-
-document
-.getElementById(
-'shopCoins'
-).innerText =
-
-'Coins: ' +
-coinCounter.count;
-
-alert(
-'Ice Board Equipped'
-);
-
-}
-
-}
-);
-
-
-
-document
-.getElementById(
-'buyLavaBoard'
-)
-.addEventListener(
-'click',
-()=>{
-
-if(
-coinCounter.count >= 2000
-) {
-
-coinCounter.count -= 2000;
-
-localStorage.setItem(
-'metroCoins',
-coinCounter.count
-);
-
-hoverboard.material.color.set(
-0xff2200
-);
-
-document
-.getElementById(
-'shopCoins'
-).innerText =
-
-'Coins: ' +
-coinCounter.count;
-
-alert(
-'Lava Board Equipped'
-);
-
-}
-
-}
-);
-
-
-
-document
-.getElementById(
-'buyGalaxyBoard'
-)
-.addEventListener(
-'click',
-()=>{
-
-if(
-coinCounter.count >= 15000
-) {
-
-coinCounter.count -= 15000;
-
-localStorage.setItem(
-'metroCoins',
-coinCounter.count
-);
-
-hoverboard.material.color.set(
-0x6600ff
-);
-
-document
-.getElementById(
-'shopCoins'
-).innerText =
-
-'Coins: ' +
-coinCounter.count;
-
-alert(
-'Galaxy Board Equipped'
-);
-
 }
 
 }
@@ -817,9 +636,9 @@ alert(
 
 /* THEMES */
 
-function updateTheme() {
+function updateTheme(){
 
-if(level < 10) {
+if(level < 10){
 
 scene.background =
 new THREE.Color(
@@ -828,7 +647,7 @@ new THREE.Color(
 
 }
 
-else if(level < 20) {
+else if(level < 20){
 
 scene.background =
 new THREE.Color(
@@ -837,7 +656,7 @@ new THREE.Color(
 
 }
 
-else if(level < 30) {
+else if(level < 30){
 
 scene.background =
 new THREE.Color(
@@ -846,7 +665,7 @@ new THREE.Color(
 
 }
 
-else if(level < 40) {
+else if(level < 40){
 
 scene.background =
 new THREE.Color(
@@ -855,7 +674,7 @@ new THREE.Color(
 
 }
 
-else {
+else{
 
 scene.background =
 new THREE.Color(
@@ -870,7 +689,32 @@ new THREE.Color(
 
 /* GAME OVER */
 
-function gameOver() {
+function gameOver(){
+
+if(gameEnded) return;
+
+gameEnded = true;
+
+paused = true;
+
+
+
+/* CHASER CATCHES PLAYER */
+
+const catchInterval =
+setInterval(()=>{
+
+chaser.position.z -= 0.3;
+
+if(
+chaser.position.distanceTo(
+player.position
+) < 1
+){
+
+clearInterval(
+catchInterval
+);
 
 alert(
 'Police Caught You!'
@@ -880,23 +724,35 @@ location.reload();
 
 }
 
+},16);
+
+}
+
 
 
 /* ANIMATE */
 
-function animate() {
+function animate(){
+
+if(paused) return;
 
 requestAnimationFrame(
 animate
 );
 
+
+
 movePlayer(player);
+
+
 
 updateObstacles(
 scene,
 player,
 speed
 );
+
+
 
 updateCoins(
 scene,
@@ -922,11 +778,15 @@ hoverboard.position.y =
 
 /* CHASER */
 
+if(!gameEnded){
+
 chaser.position.x =
 player.position.x;
 
 chaser.position.z =
-player.position.z + 5;
+player.position.z + 6;
+
+}
 
 
 
@@ -938,18 +798,21 @@ trains.forEach(
 train.position.z +=
 speed * 2;
 
+
+
 if(
-train.position
-.distanceTo(
+train.position.distanceTo(
 player.position
 ) < 3
-) {
+){
 
 gameOver();
 
 }
 
-if(train.position.z > 40) {
+
+
+if(train.position.z > 40){
 
 scene.remove(train);
 
@@ -967,9 +830,24 @@ trains.splice(index,1);
 cars.forEach(
 (car,index)=>{
 
-car.position.z += 1.5;
+car.position.z +=
+speed * 1.5;
 
-if(car.position.z > 40) {
+
+
+if(
+car.position.distanceTo(
+player.position
+) < 2
+){
+
+gameOver();
+
+}
+
+
+
+if(car.position.z > 40){
 
 scene.remove(car);
 
@@ -987,9 +865,11 @@ cars.splice(index,1);
 planes.forEach(
 (plane,index)=>{
 
-plane.position.z += 2;
+plane.position.z += 3;
 
-if(plane.position.z > 50) {
+
+
+if(plane.position.z > 50){
 
 scene.remove(plane);
 
@@ -1002,34 +882,7 @@ planes.splice(index,1);
 
 
 
-/* TRAIL */
-
-const trail =
-new THREE.Mesh(
-
-new THREE.SphereGeometry(
-0.08
-),
-
-new THREE.MeshBasicMaterial({
-color:0xff00ff
-})
-
-);
-
-trail.position.copy(
-player.position
-);
-
-scene.add(trail);
-
-setTimeout(()=>{
-
-scene.remove(trail);
-
-},200);
-
-
+/* SCORE */
 
 score++;
 
@@ -1037,11 +890,15 @@ level =
 Math.floor(score/500)+1;
 
 speed =
-0.7 + level*0.03;
+1 + level*0.05;
+
+
 
 updateTheme();
 
 
+
+/* HUD */
 
 document
 .getElementById(
@@ -1074,9 +931,19 @@ level;
 
 document
 .getElementById(
-'shopCoins'
-).innerText =
+'speed'
+)
+.innerText =
+'Speed: ' +
+speed.toFixed(1);
 
+
+
+document
+.getElementById(
+'shopCoins'
+)
+.innerText =
 'Coins: ' +
 coinCounter.count;
 
@@ -1091,7 +958,7 @@ camera
 
 
 
-/* START GAME */
+/* START */
 
 document
 .getElementById(
