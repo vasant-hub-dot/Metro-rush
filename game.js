@@ -1080,11 +1080,38 @@ START GAME
 
 document
 .getElementById(
-'startButton'
+'buyNinja'
 )
 .addEventListener(
 'click',
 ()=>{
+
+if(
+coinCounter.count >= 100
+) {
+
+coinCounter.count -= 100;
+
+playerMaterial.color.set(
+0x111111
+);
+
+document
+.getElementById(
+'shopCoins'
+).innerText =
+
+'Coins: ' +
+coinCounter.count;
+
+alert(
+'Ninja Equipped'
+);
+
+}
+
+}
+);
 
 document
 .getElementById(
