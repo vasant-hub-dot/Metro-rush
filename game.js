@@ -407,6 +407,13 @@ document
 .style.display =
 'flex';
 
+document
+.getElementById(
+'hud'
+)
+.style.display =
+'none';
+
 }
 );
 
