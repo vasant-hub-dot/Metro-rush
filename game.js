@@ -111,6 +111,9 @@ PLAYER
 const player =
 createPlayer();
 
+const playerMaterial =
+player.material;
+
 scene.add(player);
 
 
