@@ -108,7 +108,7 @@ scene.add(player);
 
 
 
-/* CAMERA POSITION */
+/* CAMERA */
 
 camera.position.set(
 0,
@@ -121,6 +121,33 @@ camera.lookAt(
 2,
 -20
 );
+
+
+
+/* SAVED COINS */
+
+let savedCoins =
+localStorage.getItem(
+'metroCoins'
+);
+
+if(savedCoins === null) {
+
+savedCoins = 50000;
+
+localStorage.setItem(
+'metroCoins',
+savedCoins
+);
+
+}
+
+const coinCounter = {
+
+count:
+Number(savedCoins)
+
+};
 
 
 
@@ -366,12 +393,6 @@ let level = 1;
 
 let speed = 0.7;
 
-const coinCounter = {
-
-count: 50000
-
-};
-
 
 
 /* SPAWNERS */
@@ -390,7 +411,7 @@ spawnCoin(scene);
 
 
 
-/* SHOP MENU */
+/* SHOP OPEN */
 
 document
 .getElementById(
@@ -419,6 +440,8 @@ document
 
 
 
+/* SHOP CLOSE */
+
 document
 .getElementById(
 'closeShop'
@@ -433,6 +456,13 @@ document
 )
 .style.display =
 'none';
+
+document
+.getElementById(
+'hud'
+)
+.style.display =
+'block';
 
 }
 );
@@ -454,6 +484,11 @@ coinCounter.count >= 100
 ) {
 
 coinCounter.count -= 100;
+
+localStorage.setItem(
+'metroCoins',
+coinCounter.count
+);
 
 playerMaterial.color.set(
 0x111111
@@ -494,6 +529,11 @@ coinCounter.count >= 300
 
 coinCounter.count -= 300;
 
+localStorage.setItem(
+'metroCoins',
+coinCounter.count
+);
+
 playerMaterial.color.set(
 0xaaaaaa
 );
@@ -532,6 +572,11 @@ coinCounter.count >= 1000
 ) {
 
 coinCounter.count -= 1000;
+
+localStorage.setItem(
+'metroCoins',
+coinCounter.count
+);
 
 playerMaterial.color.set(
 0xff3300
@@ -572,6 +617,11 @@ coinCounter.count >= 10000
 
 coinCounter.count -= 10000;
 
+localStorage.setItem(
+'metroCoins',
+coinCounter.count
+);
+
 playerMaterial.color.set(
 0x9900ff
 );
@@ -611,6 +661,11 @@ coinCounter.count >= 200
 
 coinCounter.count -= 200;
 
+localStorage.setItem(
+'metroCoins',
+coinCounter.count
+);
+
 hoverboard.material.color.set(
 0xff00ff
 );
@@ -647,6 +702,11 @@ coinCounter.count >= 800
 ) {
 
 coinCounter.count -= 800;
+
+localStorage.setItem(
+'metroCoins',
+coinCounter.count
+);
 
 hoverboard.material.color.set(
 0x66ccff
@@ -685,6 +745,11 @@ coinCounter.count >= 2000
 
 coinCounter.count -= 2000;
 
+localStorage.setItem(
+'metroCoins',
+coinCounter.count
+);
+
 hoverboard.material.color.set(
 0xff2200
 );
@@ -721,6 +786,11 @@ coinCounter.count >= 15000
 ) {
 
 coinCounter.count -= 15000;
+
+localStorage.setItem(
+'metroCoins',
+coinCounter.count
+);
 
 hoverboard.material.color.set(
 0x6600ff
@@ -798,6 +868,20 @@ new THREE.Color(
 
 
 
+/* GAME OVER */
+
+function gameOver() {
+
+alert(
+'Police Caught You!'
+);
+
+location.reload();
+
+}
+
+
+
 /* ANIMATE */
 
 function animate() {
@@ -861,11 +945,7 @@ player.position
 ) < 3
 ) {
 
-alert(
-'HIT BY TRAIN'
-);
-
-location.reload();
+gameOver();
 
 }
 
@@ -989,6 +1069,16 @@ document
 .innerText =
 'Level: ' +
 level;
+
+
+
+document
+.getElementById(
+'shopCoins'
+).innerText =
+
+'Coins: ' +
+coinCounter.count;
 
 
 
